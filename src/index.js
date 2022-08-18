@@ -31,9 +31,9 @@ function renderMarkup(name) {
             countriesArray.length === 1 ? createOneCard(countriesArray) : createCountryCards(countriesArray);
         })
         .catch(err => {
-            if (err.name === '404') {
+            if (err.message === "404") {
+                Notify.failure("Oops, there is no country with that name")
             }
-            console.log(err.message, err.name)
         })
 }
 
