@@ -1,18 +1,17 @@
-export function fetchCountries(name) {
-
-    fetch(link = 'https://restcountries.com/v2/all')
+export function fetchCountries(name = '') {
+    return fetch('https://restcountries.com/v2/all?fields=name,capital,languages,flags,population')
         .then(
             (response) => {
+                console.log(response);
                 if (!response.ok) {
                     throw new Error(response.status);
                 }
                 return response.json();
             }
-        )
-        .then(data => {
-            console.log(data.filter(v => v.name.toLowerCase().includes(name)));
+        ).then(data => {
+            const countriesArray = data.filter(v => v.name.toLowerCase().includes(name));
+            console.log(countriesArray);
+            return countriesArray;
         })
-        .catch(err => console.log(err.name))
 
 }
-
