@@ -29,7 +29,16 @@ function renderMarkup(name) {
     fetchCountries(name)
         .then(countriesArray => {
             notify(countriesArray.length);
-            countriesArray.length === 1 ? createOneCard(countriesArray) : countriesArray.length <= 10 ? createCountryCards(countriesArray) : countryList.innerHTML = '';;
+
+            console.log(countriesArray.length > 1 && countriesArray.length <= 10);
+            if (countriesArray.length > 1 && countriesArray.length <= 10) {
+                createCountryCards(countriesArray)
+            }
+            if (countriesArray.length === 1) {
+                createOneCard(countriesArray)
+            }
+            else { countryList.innerHTML = '' }
+
         })
         .catch(err => {
             if (err.message === "404") {
@@ -41,16 +50,16 @@ function renderMarkup(name) {
 
 
 function createCountryCards(countriesArray = []) {
-    const countriesCards = countriesArray.map(country => {
+    const manyCards = countriesArray.map(country => {
         return `<li><img src = '${country.flags.svg}' width = 60>  ${country.name.official}</li>`
     });
-    return countryList.innerHTML = name !== '' ? countriesCards.join('') : '';
+    return countryList.innerHTML = manyCards.join('');
 }
 
 
 
 function createOneCard(countriesArray) {
-    const countryCard = countriesArray.map(country => {
+    const oneCard = countriesArray.map(country => {
         return `<div><h1>${country.name.official}</h1>
         <img src = '${country.flags.svg}' width = 60>
         <ul>
@@ -60,7 +69,7 @@ function createOneCard(countriesArray) {
         </ul>
         </div>`
     });
-    countryList.innerHTML = name !== '' ? countryCard.join('') : name;
+    countryList.innerHTML = oneCard.join('');
     return countryCard.join('');
 }
 
