@@ -12,7 +12,7 @@ const refs = {
     countryList: document.querySelector('.country-list'),
 }
 const { searchInput: search, countryList } = refs;
-let name = null;
+let name = '';
 
 search.addEventListener('input', debounce(() => { onInputGetName.call(search) }, DEBOUNCE_DELAY));
 
@@ -27,6 +27,7 @@ function onInputGetName() {
 function renderMarkup(name) {
     fetchCountries(name)
         .then(countriesArray => {
+
             notify(countriesArray.length);
             countriesArray.length === 1 ? createOneCard(countriesArray) : countriesArray.length <= 10 ? createCountryCards(countriesArray) : countryList.innerHTML = '';;
         })
@@ -35,40 +36,41 @@ function renderMarkup(name) {
                 countryList.innerHTML = '';
                 Notify.failure("Oops, there is no country with that name");
             }
+            // console.log('🔥🌛');
         })
 }
 
 
 function createCountryCards(countriesArray = []) {
     const countriesCards = countriesArray.map(country => {
-        return `<li><img src = '${country.flags.svg}' width = 60>  ${country.name}</li>`
+        return `<li><img src = '${country.flags.svg}' width = 60>  ${country.name.official}</li>`
     });
     countryList.innerHTML = name !== '' ? countriesCards.join('') : '';
-    return countriesCards.join('');
+    return console.log(countriesCards); countriesCards.join('');
 }
 
-function createOneCard(countriesArray = []) {
+
+
+function createOneCard(countriesArray) {
     const countryCard = countriesArray.map(country => {
-        return `<di>
-        <h1>${country.name}</h1>
+        return `<div><h1>${country.name.official}</h1>
         <img src = '${country.flags.svg}' width = 60>
         <ul>
         <li><span>Capital: </span>${country.capital}</li>
         <li><span>Population: </span>${country.population}</li>
-        <li><span>languages: </span>${(country.languages.map(lang => lang.name))}</li>
+        <li><span>languages: </span>${Object.values(country.languages)}</li>
         </ul>
-        </di>
-                `
+        </div>`
     });
-    countryList.innerHTML = name !== '' ? countryCard.join('') : '';
+    countryList.innerHTML = name !== '' ? countryCard.join('') : name;
     return countryCard.join('');
 }
 
 
 function notify(length) {
-    if (length === 0) {
-        return Notify.failure("Oops, there is no country with that name")
-    }
+    // if (length === 0) {
+    //     return Notify.failure("Oops, there is no country with that name")
+    // }
     if (length > 10) {
         return Notify.info("Too many matches found. Please enter a more specific name.")
     }

@@ -1,14 +1,10 @@
-const li = 'https://restcountries.com/v3.1/name/{name}';
-// const options = new URLSearchParams({
-//     name,
-//     capital,
-//     languages,
-//     flags,
-//     population
-// })
+const BASE_URL = 'https://restcountries.com';
+const searchField = new URLSearchParams({
+    fields: ['name', 'capital', 'languages', 'flags', 'population'],
+})
 
 export function fetchCountries(name = '') {
-    return fetch(`https://restcountries.com/v2/name/${name}?fields=name,capital,languages,flags,population`)
+    return fetch(`${BASE_URL}/v3.1/name/${name}?${searchField}`)
         .then(
             (response) => {
                 console.log(response);
@@ -18,9 +14,11 @@ export function fetchCountries(name = '') {
                 return response.json();
             }
         ).then(data => {
-            const countriesArray = data.filter(v => v.name.toLowerCase().includes(name));
+            const countriesArray = data.filter(v => v.name.official.toLowerCase().includes(name));
             console.log(countriesArray);
             return countriesArray;
         })
 
 }
+
+//fields=name,capital,languages,flags,population
