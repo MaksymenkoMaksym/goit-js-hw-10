@@ -1,9 +1,12 @@
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import './css/styles.css';
-import { fetchCountries } from './js/fetchCountries.js';
+import { fetchCountries, createOneCard, createCountryCards } from './js/fetchCountries.js';
 
 const DEBOUNCE_DELAY = 300;
+const INFO_MSG = "Too many matches found. Please enter a more specific name.";
+const FAILURE_MSG = "Oops, there is no country with that name";
 
 const refs = {
     searchInput: document.querySelector('#search-box'),
@@ -28,56 +31,26 @@ function onInputGetName() {
 function renderMarkup(name) {
     fetchCountries(name)
         .then(countriesArray => {
-            notify(countriesArray.length);
-
-            console.log(countriesArray.length > 1 && countriesArray.length <= 10);
             if (countriesArray.length > 1 && countriesArray.length <= 10) {
-                createCountryCards(countriesArray)
+                countryList.innerHTML = createCountryCards(countriesArray);
             }
             if (countriesArray.length === 1) {
-                createOneCard(countriesArray)
+                countryList.innerHTML = createOneCard(countriesArray);
             }
-            else { countryList.innerHTML = '' }
-
+            if (countriesArray.length > 10) {
+                Notify.info(INFO_MSG);
+                countryList.innerHTML = ''
+            }
         })
-        .catch(err => {
-            if (err.message === "404") {
+        .catch(({ name, message }) => {
+            if (message === "404") {
                 countryList.innerHTML = '';
-                Notify.failure("Oops, there is no country with that name");
+                Notify.failure(FAILURE_MSG);
             }
+            else { Notify.failure(`Error name: ${name}.Error name: ${message}`) }
         })
 }
 
 
-function createCountryCards(countriesArray = []) {
-    const manyCards = countriesArray.map(country => {
-        return `<li><img src = '${country.flags.svg}' width = 60>  ${country.name.official}</li>`
-    });
-    return countryList.innerHTML = manyCards.join('');
-}
-
-
-
-function createOneCard(countriesArray) {
-    const oneCard = countriesArray.map(country => {
-        return `<div><h1>${country.name.official}</h1>
-        <img src = '${country.flags.svg}' width = 60>
-        <ul>
-        <li><span>Capital: </span>${country.capital}</li>
-        <li><span>Population: </span>${country.population}</li>
-        <li><span>languages: </span>${Object.values(country.languages)}</li>
-        </ul>
-        </div>`
-    });
-    countryList.innerHTML = oneCard.join('');
-    return countryCard.join('');
-}
-
-
-function notify(length) {
-    if (length > 10) {
-        return Notify.info("Too many matches found. Please enter a more specific name.")
-    }
-}
 
 

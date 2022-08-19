@@ -21,4 +21,25 @@ export function fetchCountries(name = '') {
 
 }
 
-//fields=name,capital,languages,flags,population
+
+export function createOneCard(countriesArray = []) {
+    const oneCard = countriesArray.map(country => {
+        return `<div><h1>${country.name.official}</h1>
+        <img src = '${country.flags.svg}' width = 60>
+        <ul>
+        <li><span>Capital: </span>${country.capital}</li>
+        <li><span>Population: </span>${country.population}</li>
+        <li><span>languages: </span>${Object.values(country.languages)}</li>
+        </ul>
+        </div>`
+    });
+    return oneCard.join('');
+}
+
+export function createCountryCards(countriesArray = []) {
+    const manyCards = countriesArray.map(country => {
+        return `<li><img src = '${country.flags.svg}' width = 60>  ${country.name.official}</li>`
+    });
+    return manyCards.join('');
+}
+
