@@ -30,9 +30,9 @@ export function createOneCard(countriesArray = []) {
         <h1 class="card_title">${country.name.official}</h1>
         </div>
         <ul class="card_list">
-        <li><span>Capital: </span>${country.capital}</li>
-        <li><span>Population: </span>${country.population}</li>
-        <li><span>languages: </span>${Object.values(country.languages)}</li>
+        <li><strong>Capital: </strong>${country.capital}</li>
+        <li><strong>Population: </strong>${country.population}</li>
+        <li><strong>languages: </strong>${Object.values(country.languages)}</li>
         </ul>
         </li>`
     });
