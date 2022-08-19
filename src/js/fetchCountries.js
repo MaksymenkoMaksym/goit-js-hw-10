@@ -25,8 +25,9 @@ export function fetchCountries(name = '') {
 export function createOneCard(countriesArray = []) {
     const oneCard = countriesArray.map(country => {
         return `<li class="card">
-        <div class="card_box"> <img src = '${country.flags.svg}' width = 300>
-        <h1>${country.name.official}</h1>
+        <div class="card_box">
+        <img class="card_img" src = "${country.flags.svg}" width = 300 alt ="flag of ${country.name.official}">
+        <h1 class="card_title">${country.name.official}</h1>
         </div>
         <ul class="card_list">
         <li><span>Capital: </span>${country.capital}</li>
