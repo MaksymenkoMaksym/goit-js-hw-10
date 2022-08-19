@@ -4,8 +4,6 @@ import './css/styles.css';
 import { fetchCountries } from './js/fetchCountries.js';
 
 const DEBOUNCE_DELAY = 300;
-// let link = 'https://restcountries.com/v2/all';
-let link = 'https://restcountries.com/v2/all?fields=name,capital,languages,flags,population';
 
 const refs = {
     searchInput: document.querySelector('#search-box'),
@@ -20,6 +18,9 @@ search.addEventListener('input', debounce(() => { onInputGetName.call(search) },
 
 function onInputGetName() {
     name = this.value.toLowerCase().trim();
+    if (!name) {
+        return countryList.innerHTML = '';
+    }
     renderMarkup(name);
 }
 
@@ -27,7 +28,6 @@ function onInputGetName() {
 function renderMarkup(name) {
     fetchCountries(name)
         .then(countriesArray => {
-
             notify(countriesArray.length);
             countriesArray.length === 1 ? createOneCard(countriesArray) : countriesArray.length <= 10 ? createCountryCards(countriesArray) : countryList.innerHTML = '';;
         })
@@ -36,7 +36,6 @@ function renderMarkup(name) {
                 countryList.innerHTML = '';
                 Notify.failure("Oops, there is no country with that name");
             }
-            // console.log('🔥🌛');
         })
 }
 
@@ -45,8 +44,7 @@ function createCountryCards(countriesArray = []) {
     const countriesCards = countriesArray.map(country => {
         return `<li><img src = '${country.flags.svg}' width = 60>  ${country.name.official}</li>`
     });
-    countryList.innerHTML = name !== '' ? countriesCards.join('') : '';
-    return console.log(countriesCards); countriesCards.join('');
+    return countryList.innerHTML = name !== '' ? countriesCards.join('') : '';
 }
 
 
@@ -68,17 +66,9 @@ function createOneCard(countriesArray) {
 
 
 function notify(length) {
-    // if (length === 0) {
-    //     return Notify.failure("Oops, there is no country with that name")
-    // }
     if (length > 10) {
         return Notify.info("Too many matches found. Please enter a more specific name.")
     }
 }
 
-
-/*
-https://restcountries.com/v2/{service}?fields={field},{field},{field}
-https://restcountries.com/v2/all?fields=name,capital,currencies
-*/
 

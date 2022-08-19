@@ -7,7 +7,7 @@ export function fetchCountries(name = '') {
     return fetch(`${BASE_URL}/v3.1/name/${name}?${searchField}`)
         .then(
             (response) => {
-                console.log(response);
+                // console.log(response);
                 if (!response.ok) {
                     throw new Error(response.status);
                 }
@@ -15,7 +15,7 @@ export function fetchCountries(name = '') {
             }
         ).then(data => {
             const countriesArray = data.filter(v => v.name.official.toLowerCase().includes(name));
-            console.log(countriesArray);
+            // console.log(countriesArray);
             return countriesArray;
         })
 
