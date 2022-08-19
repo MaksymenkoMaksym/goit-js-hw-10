@@ -28,16 +28,15 @@ function renderMarkup(name) {
     fetchCountries(name)
         .then(countriesArray => {
             notify(countriesArray.length);
-            countriesArray.length === 1 ? createOneCard(countriesArray) : createCountryCards(countriesArray);
+            countriesArray.length === 1 ? createOneCard(countriesArray) : countriesArray.length <= 10 ? createCountryCards(countriesArray) : countryList.innerHTML = '';;
         })
         .catch(err => {
             if (err.message === "404") {
-                Notify.failure("Oops, there is no country with that name")
+                countryList.innerHTML = '';
+                Notify.failure("Oops, there is no country with that name");
             }
         })
 }
-
-
 
 
 function createCountryCards(countriesArray = []) {
@@ -68,11 +67,9 @@ function createOneCard(countriesArray = []) {
 
 function notify(length) {
     if (length === 0) {
-        countryList.innerHTML = '';
         return Notify.failure("Oops, there is no country with that name")
     }
     if (length > 10) {
-        countryList.innerHTML = '';
         return Notify.info("Too many matches found. Please enter a more specific name.")
     }
 }
