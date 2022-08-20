@@ -14,15 +14,16 @@ export function fetchCountries(name = '') {
                 return response.json();
             }
         ).then(data => {
-            const countriesArray = data.filter(v => v.name.official.toLowerCase().includes(name));
-            // console.log(countriesArray);
-            return countriesArray;
+            // const countriesArray = data.filter(v => v.name.official.toLowerCase().includes(name));
+            // return countriesArray;
+            return data;
         })
 
 }
 
 
 export function createOneCard(countriesArray = []) {
+    console.log(countriesArray);
     const oneCard = countriesArray.map(country => {
         return `<li class="card">
         <div class="card_box">
